@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: Salms
+
+  config:
+    import: "optional:configserver:"
+
+server:
+  port: 8090
