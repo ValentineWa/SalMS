@@ -2,10 +2,8 @@ package com.salms.salms.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -18,14 +16,13 @@ public class Appointments implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @ManyToOne
     @Column(nullable = false)
-    private String customerName;
+    private Customers customers;
 
+    @ManyToOne
     @Column(nullable = false)
-    private String phoneNumber;
-
-    @Column(nullable = false)
-    private BigDecimal staffName;
+    private Staff staff;
 
     @Column(nullable = false)
     private Instant appDate;
@@ -33,9 +30,10 @@ public class Appointments implements Serializable {
     @Column(nullable = false)
     private Instant time;
 
+    @ManyToMany
     @Column(nullable = false)
-    private String servicetype;
+    private Service service;
 
     @Column(nullable = false)
-    private String preferences;
+    private String clientPreferences;
 }

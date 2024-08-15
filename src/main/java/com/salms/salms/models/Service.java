@@ -2,8 +2,6 @@ package com.salms.salms.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -12,7 +10,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "tbl_services")
-public class Services implements Serializable {
+public class Service implements Serializable {
 
     @Id
     @Column(name = "id", nullable = false, columnDefinition = "UUID")
