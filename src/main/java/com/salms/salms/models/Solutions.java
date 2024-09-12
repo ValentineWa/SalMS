@@ -5,12 +5,14 @@ import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "tbl_services")
-public class Service implements Serializable {
+public class Solutions implements Serializable {
 
     @Id
     @Column(name = "id", nullable = false, columnDefinition = "UUID")
@@ -29,5 +31,8 @@ public class Service implements Serializable {
 
     @Column(nullable = false)
     private String description;
+
+    @ManyToMany(mappedBy = "services")
+    private Set<Staff> staff = new HashSet<>();
 
 }

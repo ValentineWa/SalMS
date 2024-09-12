@@ -2,11 +2,11 @@ package com.salms.salms.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -25,4 +25,13 @@ public class Staff implements Serializable {
     @Column(nullable = false)
     private Instant joinDate;
     //When the staff started worked here
+
+    @ManyToMany
+    @JoinTable(
+            name = "staff_service",
+            joinColumns = @JoinColumn(name = "staff_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    private Set<Solutions> services = new HashSet<>();
 }
+

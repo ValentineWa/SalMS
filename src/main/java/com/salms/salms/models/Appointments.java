@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,11 +18,11 @@ public class Appointments implements Serializable {
     private UUID id;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(name = "customers_id", referencedColumnName = "id", nullable=false)
     private Customers customers;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(name = "staff_id", referencedColumnName = "id", nullable=false)
     private Staff staff;
 
     @Column(nullable = false)
@@ -31,8 +32,11 @@ public class Appointments implements Serializable {
     private Instant time;
 
     @ManyToMany
-    @Column(nullable = false)
-    private Service service;
+    @JoinTable(
+            name = "appointment_service",
+            joinColumns = @JoinColumn(name = "appointment_id"),
+            inverseJoinColumns = @JoinColumn(name = "solutions_id"))
+    private List<Solutions> solutions;
 
     @Column(nullable = false)
     private String clientPreferences;

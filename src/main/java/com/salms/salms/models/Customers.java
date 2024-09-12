@@ -2,7 +2,9 @@ package com.salms.salms.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -15,7 +17,7 @@ import java.util.UUID;
 public class Customers implements Serializable {
 
     @Id
-    @Column(name = "id", nullable = false, columnDefinition = "UUID")
+    @Column(nullable = false, columnDefinition = "UUID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
