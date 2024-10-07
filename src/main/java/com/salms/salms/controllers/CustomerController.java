@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -40,9 +41,10 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newCustomer);
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<Customers>> getAllCustomers() {
-//        return ResponseEntity.ok(customerService.getAllCustomers());
-//    }`
+    @GetMapping("/getAllCustomers")
+        public ResponseEntity<List> getAllCustomers() {
+        List<Customers> allCustomers = customerRepository.findAll();
+        return ResponseEntity.status(HttpStatus.FOUND).body(allCustomers);
+    }
 
 }
