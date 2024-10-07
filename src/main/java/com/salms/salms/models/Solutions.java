@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -15,15 +13,14 @@ import java.util.UUID;
 public class Solutions implements Serializable {
 
     @Id
-    @Column(name = "id", nullable = false, columnDefinition = "UUID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @Column(name = "id", nullable = false)
+    private String id;
 
     @Column(nullable = false)
     private String serviceName;
 
     @Column(nullable = false)
-    private Instant duration;
+    private int duration;
     //How long the service takes
 
     @Column(nullable = false)

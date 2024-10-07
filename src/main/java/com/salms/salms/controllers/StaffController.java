@@ -1,13 +1,9 @@
 package com.salms.salms.controllers;
 
-import com.salms.salms.dto.CustomersRequest;
 import com.salms.salms.dto.StaffRequest;
 import com.salms.salms.exceptions.GlobalExceptionHandler;
-import com.salms.salms.models.Customers;
 import com.salms.salms.models.Staff;
-import com.salms.salms.repositories.CustomerRepository;
 import com.salms.salms.repositories.StaffRepository;
-import com.salms.salms.services.CustomerService;
 import com.salms.salms.services.StaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,4 +44,7 @@ public class StaffController {
         List<Staff> allStaff = staffRepository.findAll();
         return ResponseEntity.status(HttpStatus.FOUND).body(allStaff);
     }
+
+
+
 }

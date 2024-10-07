@@ -1,18 +1,13 @@
 package com.salms.salms.services;
 
-import com.salms.salms.dto.CustomersRequest;
 import com.salms.salms.dto.StaffRequest;
-import com.salms.salms.models.Customers;
 import com.salms.salms.models.Staff;
-import com.salms.salms.repositories.CustomerRepository;
 import com.salms.salms.repositories.StaffRepository;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -26,6 +21,7 @@ public class StaffService {
             Staff staff = new Staff();
         staff.setId(UUID.randomUUID());
         staff.setStaffName(staffRequest.getStaffName());
+        staff.setStaffAlias(staff.getStaffAlias());
         staff.setIdNumber(staffRequest.getIdNumber());
         staff.setPhoneNumber(staffRequest.getPhoneNumber());
         staff.setStartDate(staffRequest.getStartDate());

@@ -14,6 +14,7 @@ import java.time.LocalDate;
 public class StaffRequest {
 
     @NotNull private String staffName;
+    @NotNull private String staffAlias;
     @NotNull private String idNumber;
     @NotNull private String phoneNumber;
     @NotNull private LocalDate startDate;

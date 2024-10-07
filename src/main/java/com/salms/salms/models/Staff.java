@@ -1,7 +1,6 @@
 package com.salms.salms.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -23,6 +22,9 @@ public class Staff implements Serializable {
 
     @Column(nullable = false)
     private String staffName;
+
+    @Column(nullable = false)
+    private String staffAlias;
 
     @Column(nullable = false)
     private String idNumber;
