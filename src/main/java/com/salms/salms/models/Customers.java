@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -28,7 +29,7 @@ public class Customers implements Serializable {
     private String phoneNumber;
 
     @Column(nullable = false)
-    private Instant startDate;
+    private LocalDate startDate;
     // When they started the service
 
     @Column(nullable = false)
