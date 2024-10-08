@@ -29,7 +29,12 @@ public class Solutions implements Serializable {
     @Column(nullable = false)
     private String description;
 
-    @ManyToMany(mappedBy = "services")
+    //Many staff can perform many services
+    @ManyToMany(mappedBy = "solutions")
     private Set<Staff> staff = new HashSet<>();
+
+    //Many customers can book many services
+    @ManyToMany(mappedBy = "solutions")
+    private Set<Customers> customers = new HashSet<>();
 
 }

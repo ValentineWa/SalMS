@@ -49,12 +49,12 @@ public class Staff implements Serializable {
     private Instant creationDate;
     //When the staff started worked here
 
-
+    //A staff can perform many services
     @ManyToMany
     @JoinTable(
-            name = "staff_service",
+            name = "staff_Services",
             joinColumns = @JoinColumn(name = "staff_id"),
-            inverseJoinColumns = @JoinColumn(name = "service_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "solutions_id"))
+
     private Set<Solutions> services = new HashSet<>();
 }
