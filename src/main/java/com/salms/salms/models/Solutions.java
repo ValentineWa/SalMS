@@ -33,8 +33,8 @@ public class Solutions implements Serializable {
     @ManyToMany(mappedBy = "solutions")
     private Set<Staff> staff = new HashSet<>();
 
-    //Many customers can book many services
-    @ManyToMany(mappedBy = "solutions")
-    private Set<Customers> customers = new HashSet<>();
+//    //Many customers can book many services
+//    @ManyToMany(mappedBy = "solutions")
+//    private Set<Customers> customers = new HashSet<>();
 
 }

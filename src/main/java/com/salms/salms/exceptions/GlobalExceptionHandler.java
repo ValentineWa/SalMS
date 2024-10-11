@@ -16,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +49,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(ErrorCode.CUSTOMER_ALREADY_EXISTS.getHttpStatus()).body(errorResponse);
     }
 
+
+    public ResponseEntity<ErrorResponseDto> appointmentAlreadyExists(String phoneNumber, LocalDate appDate) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto(
+                ErrorCode.APPOINTMENT_ALREADY_EXISTS.getHttpStatus(),ErrorCode.APPOINTMENT_ALREADY_EXISTS.getErrMsgKey(), ErrorCode.APPOINTMENT_ALREADY_EXISTS.getErrCode()
+        );
+        return ResponseEntity.status(ErrorCode.CUSTOMER_ALREADY_EXISTS.getHttpStatus()).body(errorResponse);
+    }
 
 
 }

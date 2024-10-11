@@ -25,10 +25,14 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
+
     @Autowired
     private CustomerRepository customerRepository;
+
     @Autowired
     private GlobalExceptionHandler globalExceptionHandler;
+
+
     @PostMapping("/createNew")
     public ResponseEntity<?> createCustomer(@RequestBody CustomersRequest customerRequest) {
         String phoneNumber = customerRequest.getPhoneNumber();

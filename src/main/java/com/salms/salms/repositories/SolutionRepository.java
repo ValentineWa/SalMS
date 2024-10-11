@@ -9,4 +9,6 @@ public interface SolutionRepository extends JpaRepository<Solutions, Long> {
 
 
     Optional<Solutions> findByServiceName(String serviceName);
+
+    Solutions findByServiceName2(String serviceName);
 }

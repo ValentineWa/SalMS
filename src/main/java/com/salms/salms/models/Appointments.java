@@ -5,8 +5,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,31 +30,36 @@ public class Appointments implements Serializable {
     private Staff staff;
 
     @Column(nullable = false)
-    private Instant appDate;
+    private LocalDate appDate;
 
     @Column(nullable = false)
     private Instant time;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AppStatus appStatus;
 
     @Column(nullable = false)
     private String clientPreferences;
 
-    //A customer can have many services in an appointment
-    @ManyToMany
-    @JoinTable(
-            name = "appointment_Services",
-            joinColumns = @JoinColumn(name = "appointments_id"),
-            inverseJoinColumns = @JoinColumn(name = "solutions_id")
-    )
-    private Set<Solutions> services = new HashSet<>();
 
+    ////What's orphanremoval?
+
+    @OneToMany(mappedBy = "appointments", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AppointmentDetails> appointmentDetails = new HashSet<>();
+
+    @Column(nullable = false)
+    private Instant createdOn;
+
+    @Column(nullable = false)
+    private Instant updatedOn;
 
     public enum AppStatus {
-        COMPLETED,
-        RESCHEDULED,
-        CANCELED
+        OPEN, //Customer has created the appointment, not done but booked
+        IN_PROGRESS,    //Customer is currently receiving the services
+        CONFIRMED,       // All services confirmed and staff added and total amount provided. Final Step before payment
+        COMPLETED,       // All services have been provided and appointed is finished, payment done.
+        CANCELLED       // Appointment was cancelled by customer or Salon
     }
 
 }

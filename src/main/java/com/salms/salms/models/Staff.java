@@ -52,7 +52,7 @@ public class Staff implements Serializable {
     //A staff can perform many services
     @ManyToMany
     @JoinTable(
-            name = "staff_Services",
+            name = "staff_services",
             joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "solutions_id"))
 
