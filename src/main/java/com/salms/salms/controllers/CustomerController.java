@@ -36,9 +36,9 @@ public class CustomerController {
     @PostMapping("/createNew")
     public ResponseEntity<?> createCustomer(@RequestBody CustomersRequest customerRequest) {
         String phoneNumber = customerRequest.getPhoneNumber();
-        Optional<Customers> existingCustomer = customerRepository.findByPhoneNumber(phoneNumber);
+        Customers existingCustomer = customerRepository.findByPhoneNumber(phoneNumber);
 
-        if (existingCustomer.isPresent()) {
+        if (existingCustomer != null) {
             return globalExceptionHandler.handlePhoneNumberExists(phoneNumber);
         }
         Customers newCustomer = customerService.createCustomer(customerRequest);

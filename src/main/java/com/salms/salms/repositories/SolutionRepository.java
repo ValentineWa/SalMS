@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface SolutionRepository extends JpaRepository<Solutions, Long> {
 
 
-    Optional<Solutions> findByServiceName(String serviceName);
+//    Optional<Solutions> findByServiceName(String serviceName);
 
-    Solutions findByServiceName2(String serviceName);
+    Solutions findByServiceName(String serviceName);
 }

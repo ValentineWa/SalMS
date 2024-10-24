@@ -37,12 +37,11 @@ public class AppointmentService {
     @Autowired
     private AppointmentDetailsRepository appointmentDetailsRepository;
 
-
     public Appointments booking (AppointmentRequest appointmentRequest){
         String phoneNumber = appointmentRequest.getPhoneNumber();
 
         //1. Look for existing customer by phone
-       Customers customers =  customerRepository.findByPhoneNumber2(appointmentRequest.getPhoneNumber());
+       Customers customers =  customerRepository.findByPhoneNumber(appointmentRequest.getPhoneNumber());
 
         //2. If customer doesnt exist, create one
         if(customers == null){
@@ -61,25 +60,30 @@ public class AppointmentService {
 
         //4. Check if they have existing appointment
 
-        Appointments booking = appointmentRepository.findAppointmentsByPhoneNumberAndDate(appointmentRequest.getPhoneNumber(), appointmentRequest.getAppDate());
+        Appointments booking = appointmentRepository.findByCustomersPhoneNumberAndAppDate(appointmentRequest.getPhoneNumber(), appointmentRequest.getAppDate());
             if (booking != null){
+
                 log.info("CUSTOMER ALREADY HAS AN EXISTING APPOINTMENT IN THE SELECTED DATE %s", appointmentRequest.getAppDate());
 
         }
+
             //Create the appointment in the primary table
             booking = new Appointments();
             booking.setCustomers(customers);
             booking.setAppDate(appointmentRequest.getAppDate());
             booking.setTime(appointmentRequest.getTime());
+            booking.setId(UUID.randomUUID());
             booking.setClientPreferences(appointmentRequest.getClientPreferences());
             booking.setAppStatus(Appointments.AppStatus.OPEN);
+            booking.setCreatedOn(Instant.now());
+            booking.setUpdatedOn(Instant.now());
 
 
         //5. Get the primary service getting done
         Set<Solutions> services = new HashSet<>();
         for (String serviceName : appointmentRequest.getServicesName()) {
 
-            Solutions sol = solutionRepository.findByServiceName2(serviceName);
+            Solutions sol = solutionRepository.findByServiceName(serviceName);
             if (sol == null) {
                 log.warn("SERVICE SELECTED NOT FOUND: {}", serviceName);
                 continue;
@@ -88,7 +92,7 @@ public class AppointmentService {
 
 
             //3. Find the staff assigned to this service
-            Staff staff = staffRepository.findByAlias(appointmentRequest.getStaffAlias());
+            Staff staff = staffRepository.findByStaffAlias(appointmentRequest.getStaffAlias());
 
             if (staff == null) {
                 log.warn("STAFF SELECTED IS NOT FOUND FOR THIS SERVICE: {}", serviceName);
@@ -97,6 +101,7 @@ public class AppointmentService {
                 // return the right error
                 //cater how we'll handle walk ins
                 //
+
             }
 
             //Cater for when its null: although its going to be a dropdown too not sure.

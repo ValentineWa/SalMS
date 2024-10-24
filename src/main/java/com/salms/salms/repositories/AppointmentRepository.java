@@ -8,5 +8,5 @@ import java.time.LocalDate;
 
 public interface AppointmentRepository extends JpaRepository<Appointments, Long> {
 
-    Appointments findAppointmentsByPhoneNumberAndDate(String phoneNumber, LocalDate date);
+    Appointments findByCustomersPhoneNumberAndAppDate(String phoneNumber, LocalDate appdate);
 }

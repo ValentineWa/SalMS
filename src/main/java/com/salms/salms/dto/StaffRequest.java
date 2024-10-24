@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -22,5 +23,6 @@ public class StaffRequest {
     @NotNull private String nationality;
     @NotNull private String physicalAddress;
     @NotNull private Instant creationDate;
+    @NotNull List<String> serviceNames;
 
 }

@@ -30,9 +30,9 @@ public class SolutionController {
     @PostMapping("/createNew")
     public ResponseEntity<?> createCustomer(@RequestBody SolutionRequest solutionRequest) {
         String serviceName = solutionRequest.getServiceName();
-            Optional<Solutions> existingService = solutionRepository.findByServiceName(serviceName);
+            Solutions existingService = solutionRepository.findByServiceName(serviceName);
 
-        if (existingService.isPresent()) {
+        if (existingService !=null) {
             return globalExceptionHandler.handlePhoneNumberExists(serviceName);
         }
         Solutions newService = solutionService.createService(solutionRequest);

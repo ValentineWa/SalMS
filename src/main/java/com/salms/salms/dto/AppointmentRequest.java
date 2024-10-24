@@ -20,10 +20,9 @@ public class AppointmentRequest {
     @NotNull private String phoneNumber;
     @NotNull private String staffAlias;  //Can be a walk in so you assign a staff or the customer says who they want
     @NotNull LocalDate appDate;
-    @NotNull Instant time;
+    @NotNull String time;
     @NotNull Appointments.AppStatus appStatus;
     @NotNull String clientPreferences;
     @NotNull List<String> servicesName;
-
 
 }

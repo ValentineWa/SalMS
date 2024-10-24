@@ -33,7 +33,7 @@ public class Appointments implements Serializable {
     private LocalDate appDate;
 
     @Column(nullable = false)
-    private Instant time;
+    private String time;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -59,7 +59,6 @@ public class Appointments implements Serializable {
         IN_PROGRESS,    //Customer is currently receiving the services
         CONFIRMED,       // All services confirmed and staff added and total amount provided. Final Step before payment
         COMPLETED,       // All services have been provided and appointed is finished, payment done.
-        CANCELLED       // Appointment was cancelled by customer or Salon
     }
 
 }

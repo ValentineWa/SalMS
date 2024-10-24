@@ -52,9 +52,9 @@ public class Staff implements Serializable {
     //A staff can perform many services
     @ManyToMany
     @JoinTable(
-            name = "staff_services",
+            name = "staff_solutions",
             joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "solutions_id"))
 
-    private Set<Solutions> services = new HashSet<>();
+    private Set<Solutions> solutions = new HashSet<>();
 }
