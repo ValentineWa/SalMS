@@ -1,6 +1,8 @@
 package com.salms.salms.services;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.salms.salms.dto.AppointmentRequest;
+import com.salms.salms.dto.AppointmentResponse;
 import com.salms.salms.exceptions.GlobalExceptionHandler;
 import com.salms.salms.models.*;
 import com.salms.salms.repositories.*;
@@ -13,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -142,4 +145,30 @@ public class AppointmentService {
 
 
         }
+
+    public AppointmentResponse createAppointment(Appointments booking){
+        AppointmentResponse responseDto = new AppointmentResponse();
+        responseDto.setAppDate(booking.getAppDate());
+        responseDto.setTime(booking.getTime());
+        responseDto.setFullName(booking.getCustomers().getFullName());
+        responseDto.setClientPreferences(booking.getClientPreferences());
+        responseDto.setStaffAlias(booking.getStaff().getStaffAlias());
+        responseDto.setPhoneNumber(booking.getCustomers().getPhoneNumber());
+
+        List<Solutions> bookedServices = booking.getAppointmentDetails().stream()
+                .map(details -> {
+                    Solutions servs = new Solutions();
+                    servs.setServiceName(details.getServices().get(0).getServiceName());
+                    servs.setPrice(details.getPrice());
+                    servs.setDuration(details.getDuration());
+                    return servs;
+                })
+                .collect(Collectors.toList());
+
+        responseDto.setServicesName(bookedServices);
+
+        return responseDto;
+
+    }
 }
+
