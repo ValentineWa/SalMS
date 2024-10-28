@@ -1,16 +1,17 @@
 package com.salms.salms.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-@Data
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "tbl_customers")
 public class Customers implements Serializable {
@@ -35,7 +36,7 @@ public class Customers implements Serializable {
 
     //A customer can have many appoinyments generally
     @OneToMany(mappedBy = "customers")
-    private Set<Appointments> appointments = new HashSet<>();
+    private List<Appointments> appointments = new ArrayList<>();
 
     //A customer can have many services in one appointment
     @ManyToMany
@@ -44,6 +45,6 @@ public class Customers implements Serializable {
             joinColumns = @JoinColumn(name = "customers_id"),
             inverseJoinColumns = @JoinColumn(name = "solutions_id"))
 
-    private Set<Solutions> services = new HashSet<>();
+    private List<Solutions> services = new ArrayList<>();
 
 }

@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -29,7 +26,7 @@ public class StaffService {
     public Staff createStaff (StaffRequest staffRequest){
 
         //5. Get the primary service getting done
-        Set<Solutions> services = new HashSet<>();
+        List<Solutions> services = new ArrayList<>();
           for (String serviceName : staffRequest.getServiceNames()) {
 
             Solutions sol = solutionRepository.findByServiceName(serviceName);

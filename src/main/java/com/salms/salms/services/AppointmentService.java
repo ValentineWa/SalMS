@@ -4,16 +4,15 @@ import com.salms.salms.dto.AppointmentRequest;
 import com.salms.salms.exceptions.GlobalExceptionHandler;
 import com.salms.salms.models.*;
 import com.salms.salms.repositories.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -37,7 +36,7 @@ public class AppointmentService {
     @Autowired
     private AppointmentDetailsRepository appointmentDetailsRepository;
 
-    public Appointments booking (AppointmentRequest appointmentRequest){
+    public Appointments bookAppointment (AppointmentRequest appointmentRequest){
         String phoneNumber = appointmentRequest.getPhoneNumber();
 
         //1. Look for existing customer by phone
@@ -51,9 +50,10 @@ public class AppointmentService {
             customers.setId(UUID.randomUUID());
             customers.setFullName(appointmentRequest.getFullName());
             customers.setPhoneNumber(appointmentRequest.getPhoneNumber());
-            customers.setStartDate(LocalDate.from(Instant.now()));
+            customers.setStartDate(LocalDate.now());
             customers.setCreationDate(Instant.now());
             customerRepository.save(customers);
+
 
             log.info("CUSTOMER DETAILS HAVE BEEN ADDED TO THE DATABASE SUCCESSFULY");
         }
@@ -62,9 +62,8 @@ public class AppointmentService {
 
         Appointments booking = appointmentRepository.findByCustomersPhoneNumberAndAppDate(appointmentRequest.getPhoneNumber(), appointmentRequest.getAppDate());
             if (booking != null){
-
                 log.info("CUSTOMER ALREADY HAS AN EXISTING APPOINTMENT IN THE SELECTED DATE %s", appointmentRequest.getAppDate());
-
+                return booking;
         }
 
             //Create the appointment in the primary table
@@ -79,8 +78,10 @@ public class AppointmentService {
             booking.setUpdatedOn(Instant.now());
 
 
-        //5. Get the primary service getting done
-        Set<Solutions> services = new HashSet<>();
+
+            List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
+
+            List<Solutions> services = new ArrayList<>();
         for (String serviceName : appointmentRequest.getServicesName()) {
 
             Solutions sol = solutionRepository.findByServiceName(serviceName);
@@ -109,16 +110,21 @@ public class AppointmentService {
 
             //Create Appointment details
             AppointmentDetails details = new AppointmentDetails();
+            details.setId(UUID.randomUUID());
             details.setAppointments(booking);
-            details.setServices(Collections.singleton(sol));
+            details.setServices(Collections.singletonList(sol));
             details.setPrice(sol.getPrice());
             details.setDuration(sol.getDuration());
+            details.setCreationOn(Instant.now());
+            details.setUpdatedOn(Instant.now());
             details.setStaff(staff);
-            booking.getAppointmentDetails().add(details);
+            booking.setStaff(staff);
+
+
+            appointmentDetailsList.add(details);
         }
+        booking.setAppointmentDetails(appointmentDetailsList);
             appointmentRepository.save(booking);
-
-
             return booking;
 
             //5. Get the primary service getting done or get all and then distribute. But what if they add more later on?
@@ -136,7 +142,4 @@ public class AppointmentService {
 
 
         }
-
-
-
 }

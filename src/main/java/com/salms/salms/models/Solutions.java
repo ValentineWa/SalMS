@@ -1,13 +1,18 @@
 package com.salms.salms.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "tbl_services")
 public class Solutions implements Serializable {
@@ -30,7 +35,8 @@ public class Solutions implements Serializable {
     private String description;
 
     //Many staff can perform many services
+    @ToString.Exclude
     @ManyToMany(mappedBy = "solutions")
-    private Set<Staff> staff = new HashSet<>();
+    private List<Staff> staff = new ArrayList<>();
 
 }

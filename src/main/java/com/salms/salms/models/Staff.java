@@ -1,16 +1,17 @@
 package com.salms.salms.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "tbl_staff")
 public class Staff implements Serializable {
@@ -56,5 +57,5 @@ public class Staff implements Serializable {
             joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "solutions_id"))
 
-    private Set<Solutions> solutions = new HashSet<>();
+    private List<Solutions> solutions = new ArrayList<>();
 }

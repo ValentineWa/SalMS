@@ -1,35 +1,40 @@
 package com.salms.salms.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-@Data
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "tbl_appointment_details")
 public class AppointmentDetails implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "appointment_id", nullable = false)
     private Appointments appointments;
 
         //A customer can have many services in an appointment
+    @ToString.Exclude
     @ManyToMany
     @JoinTable(
             name = "appointment_details_services",
             joinColumns = @JoinColumn(name = "appointment_details_id"),
             inverseJoinColumns = @JoinColumn(name = "solutions_id")
     )
-    private Set<Solutions> services = new HashSet<>();
+    private List<Solutions> services = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "staff_id", nullable = false)

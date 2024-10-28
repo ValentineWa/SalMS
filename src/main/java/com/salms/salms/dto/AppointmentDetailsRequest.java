@@ -18,7 +18,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AppointmentDetailsRequest {
 
-    private UUID id;
     private UUID appointmentId;
     private String serviceName;
     private BigDecimal price;

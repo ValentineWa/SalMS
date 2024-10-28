@@ -35,8 +35,8 @@ public class AppointmentController {
         @PostMapping("/createNew")
         public ResponseEntity<Appointments> bookAppointment(@RequestBody AppointmentRequest appointmentRequest) {
             try{
-                Appointments booking = appointmentService.booking(appointmentRequest);
-                return ResponseEntity.status(HttpStatus.CREATED).body(booking);
+                Appointments bookApp = appointmentService.bookAppointment(appointmentRequest);
+                return ResponseEntity.status(HttpStatus.CREATED).body(bookApp);
             } catch(Exception e)
             {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

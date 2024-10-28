@@ -21,7 +21,7 @@ public class AppointmentRequest {
     @NotNull private String staffAlias;  //Can be a walk in so you assign a staff or the customer says who they want
     @NotNull LocalDate appDate;
     @NotNull String time;
-    @NotNull Appointments.AppStatus appStatus;
+    Appointments.AppStatus appStatus;
     @NotNull String clientPreferences;
     @NotNull List<String> servicesName;
 

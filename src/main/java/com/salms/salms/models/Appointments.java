@@ -1,16 +1,17 @@
 package com.salms.salms.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "tbl_appointments")
 public class Appointments implements Serializable {
@@ -44,9 +45,9 @@ public class Appointments implements Serializable {
 
 
     ////What's orphanremoval?
-
+    @ToString.Exclude
     @OneToMany(mappedBy = "appointments", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AppointmentDetails> appointmentDetails = new HashSet<>();
+    private List<AppointmentDetails> appointmentDetails = new ArrayList<>();
 
     @Column(nullable = false)
     private Instant createdOn;
