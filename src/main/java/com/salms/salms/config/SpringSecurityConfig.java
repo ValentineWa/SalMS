@@ -13,6 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -27,11 +31,12 @@ public class SpringSecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults()) // Enable CORS configuration
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
                 .authorizeHttpRequests(authz -> authz
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable());
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
@@ -45,4 +50,18 @@ public class SpringSecurityConfig{
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedOrigin("http://localhost:3000"); // Frontend origin
+        configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.addAllowedMethod("*"); // Allow all HTTP methods
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 }
