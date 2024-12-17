@@ -16,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppointmentRequest {
-    @NotNull private String fullName;
+    @NotNull private String firstName;
+     private String lastName;
     @NotNull private String phoneNumber;
     @NotNull private String staffAlias;  //Can be a walk in so you assign a staff or the customer says who they want
     @NotNull LocalDate appDate;

@@ -22,7 +22,10 @@ public class Customers implements Serializable {
     private UUID id;
 
     @Column(nullable = false)
-    private String fullName;
+    private String firstName;
+
+    @Column
+    private String lastName;
 
     @Column(nullable = false)
     private String phoneNumber;
@@ -34,7 +37,7 @@ public class Customers implements Serializable {
     @Column(nullable = false)
     private Instant creationDate;
 
-    //A customer can have many appoinyments generally
+    //A customer can have many appointments generally
     @OneToMany(mappedBy = "customers")
     private List<Appointments> appointments = new ArrayList<>();
 

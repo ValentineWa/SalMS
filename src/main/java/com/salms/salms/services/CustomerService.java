@@ -19,12 +19,13 @@ public class CustomerService {
     public Customers createCustomer(CustomersRequest customerRequest){
         Customers customer = new Customers();
         customer.setId(UUID.randomUUID());
-        customer.setFullName(customerRequest.getFullName());
+        customer.setFirstName(customerRequest.getFirstName());
+        customer.setLastName(customerRequest.getLastName());
         customer.setPhoneNumber(customerRequest.getPhoneNumber());
         customer.setStartDate(customerRequest.getStartDate());
         customer.setCreationDate(Instant.now());
         customerRepository.save(customer);
-        log.info("CUSTOMER [%s] HAS BEEN CREATED SUCCESSFULLY", customerRequest.getFullName());
+        log.info("CUSTOMER [%s] HAS BEEN CREATED SUCCESSFULLY", customerRequest.getFirstName());
         return customer;
     }
 

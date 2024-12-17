@@ -21,7 +21,10 @@ import java.util.List;
 public class AppointmentResponse extends GenericApiResponseContent {
 
     @JsonProperty("full_name")
-    private String fullName;
+    private String firstName;
+
+    @JsonProperty("full_name")
+    private String lastName;
 
     @JsonProperty("staff_alias")
     private String staffAlias;

@@ -51,7 +51,8 @@ public class AppointmentService {
 
             customers = new Customers();
             customers.setId(UUID.randomUUID());
-            customers.setFullName(appointmentRequest.getFullName());
+            customers.setFirstName(appointmentRequest.getFirstName());
+            customers.setLastName(appointmentRequest.getLastName());
             customers.setPhoneNumber(appointmentRequest.getPhoneNumber());
             customers.setStartDate(LocalDate.now());
             customers.setCreationDate(Instant.now());
@@ -142,15 +143,14 @@ public class AppointmentService {
             //If the services are more than one who will that look like in my appointments
             //Are the services going to be stored as a list and how will I know who did what during an appointment?
 
-
-
         }
 
     public AppointmentResponse createAppointment(Appointments booking){
         AppointmentResponse responseDto = new AppointmentResponse();
         responseDto.setAppDate(booking.getAppDate());
         responseDto.setTime(booking.getTime());
-        responseDto.setFullName(booking.getCustomers().getFullName());
+        responseDto.setFirstName(booking.getCustomers().getFirstName());
+        responseDto.setLastName(booking.getCustomers().getLastName());
         responseDto.setClientPreferences(booking.getClientPreferences());
         responseDto.setStaffAlias(booking.getStaff().getStaffAlias());
         responseDto.setPhoneNumber(booking.getCustomers().getPhoneNumber());

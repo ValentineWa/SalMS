@@ -34,6 +34,8 @@ public class AppointmentDetails implements Serializable {
             joinColumns = @JoinColumn(name = "appointment_details_id"),
             inverseJoinColumns = @JoinColumn(name = "solutions_id")
     )
+
+
     private List<Solutions> services = new ArrayList<>();
 
     @ManyToOne
