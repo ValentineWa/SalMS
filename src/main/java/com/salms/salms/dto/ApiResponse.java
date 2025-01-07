@@ -1,41 +1,24 @@
 package com.salms.salms.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Map;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @ToString
-public class ApiResponse <T extends GenericApiResponseContent> {
-
+public class ApiResponse <T> {
+    private int statusCode;
+    private String message;
     private boolean success;
     private T data;
-    private Error error;
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public void setData(T data) {
+    public ApiResponse(int statusCode, String message, T data) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.success = statusCode == 200; // Assuming 200 is a success
         this.data = data;
     }
 
-    public void setError(Error error) {
-        this.error = error;
-    }
-
-    @Data
-    public static class Error {
-        private String message;
-        private Map<String, Object> errors;
-
-        public Error(String message, Map<String, Object> errors) {
-            this.message = message;
-            this.errors = errors;
-        }
-    }
 }

@@ -45,7 +45,7 @@ public class AppointmentService {
         //1. Look for existing customer by phone
        Customers customers =  customerRepository.findByPhoneNumber(appointmentRequest.getPhoneNumber());
 
-        //2. If customer doesnt exist, create one
+        //2. If customer doesn't exist, create one
         if(customers == null){
             log.info("THIS IS A NEW CUSTOMER");
 

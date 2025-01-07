@@ -20,10 +20,10 @@ import java.util.List;
 @Builder
 public class AppointmentResponse extends GenericApiResponseContent {
 
-    @JsonProperty("full_name")
+    @JsonProperty("first_name")
     private String firstName;
 
-    @JsonProperty("full_name")
+    @JsonProperty("last_name")
     private String lastName;
 
     @JsonProperty("staff_alias")
@@ -43,6 +43,4 @@ public class AppointmentResponse extends GenericApiResponseContent {
 
     @JsonProperty("services_name")
     private List<Solutions> servicesName;
-
-
 }
