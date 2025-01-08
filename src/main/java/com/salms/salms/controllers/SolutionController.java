@@ -32,9 +32,9 @@ public class SolutionController {
         String serviceName = solutionRequest.getServiceName();
             Solutions existingService = solutionRepository.findByServiceName(serviceName);
 
-        if (existingService !=null) {
-            return globalExceptionHandler.handlePhoneNumberExists(serviceName);
-        }
+//        if (existingService !=null) {
+//            return globalExceptionHandler.handlePhoneNumberExists(serviceName);
+//        }
         Solutions newService = solutionService.createService(solutionRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(newService);
     }

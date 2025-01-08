@@ -31,10 +31,10 @@ public class StaffController {
         String idNumber = staffRequest.getIdNumber();
 
         Optional<Staff> existingStaff = staffRepository.findByIdNumber(idNumber);
-
-        if (existingStaff.isPresent()) {
-            return globalExceptionHandler.handlePhoneNumberExists(idNumber);
-        }
+//
+//        if (existingStaff.isPresent()) {
+//            return globalExceptionHandler.handlePhoneNumberExists(idNumber);
+//        }
         Staff newStaff = staffService.createStaff(staffRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(newStaff);
     }

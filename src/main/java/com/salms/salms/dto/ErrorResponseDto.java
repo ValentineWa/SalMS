@@ -17,8 +17,9 @@ import java.util.Objects;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponseDto {
+    private String statusCode;
     private HttpStatus status;
     private String statusMessage;
-    private String statusCode;
+
 
 }

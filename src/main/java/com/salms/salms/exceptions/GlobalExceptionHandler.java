@@ -35,16 +35,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         this.messageSource = messageSource;
     }
 
-
     static{
 
+        EXCEPTION_MAPPINGS.put(CustomerAlreadyExistsException.class, ErrorCode.CUSTOMER_ALREADY_EXISTS);
         EXCEPTION_MAPPINGS.put(CustomerNotFoundException.class, ErrorCode.CUSTOMER_NOT_FOUND);
+        EXCEPTION_MAPPINGS.put(AppointmentAlreadyExistsException.class, ErrorCode.APPOINTMENT_ALREADY_EXISTS);
 
     }
-
-    public ResponseEntity<ErrorResponseDto> handlePhoneNumberExists(String phoneNumber) {
+@ExceptionHandler(CustomerAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handlePhoneNumberExists(CustomerAlreadyExistsException ex) {
+        log.error("Customer you are trying to create already exists.", ex.getMessage(), ex);
         ErrorResponseDto errorResponse = new ErrorResponseDto(
-                ErrorCode.CUSTOMER_ALREADY_EXISTS.getHttpStatus(),ErrorCode.CUSTOMER_ALREADY_EXISTS.getErrMsgKey(), ErrorCode.CUSTOMER_ALREADY_EXISTS.getErrCode()
+                ErrorCode.CUSTOMER_ALREADY_EXISTS.getErrCode(), ErrorCode.CUSTOMER_ALREADY_EXISTS.getHttpStatus(),ErrorCode.CUSTOMER_ALREADY_EXISTS.getErrMsgKey()
                 );
         return ResponseEntity.status(ErrorCode.CUSTOMER_ALREADY_EXISTS.getHttpStatus()).body(errorResponse);
     }
@@ -52,10 +54,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     public ResponseEntity<ErrorResponseDto> appointmentAlreadyExists(String phoneNumber, LocalDate appDate) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(
-                ErrorCode.APPOINTMENT_ALREADY_EXISTS.getHttpStatus(),ErrorCode.APPOINTMENT_ALREADY_EXISTS.getErrMsgKey(), ErrorCode.APPOINTMENT_ALREADY_EXISTS.getErrCode()
+                ErrorCode.APPOINTMENT_ALREADY_EXISTS.getErrCode(), ErrorCode.APPOINTMENT_ALREADY_EXISTS.getHttpStatus(),ErrorCode.APPOINTMENT_ALREADY_EXISTS.getErrMsgKey()
         );
-        return ResponseEntity.status(ErrorCode.CUSTOMER_ALREADY_EXISTS.getHttpStatus()).body(errorResponse);
+        return ResponseEntity.status(ErrorCode.APPOINTMENT_ALREADY_EXISTS.getHttpStatus()).body(errorResponse);
     }
-
 
 }

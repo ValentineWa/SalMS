@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -33,16 +32,7 @@ public class CustomerController {
 
 
     @PostMapping("/createNew")
-//    public ResponseEntity<?> createCustomer(@RequestBody CustomersRequest customerRequest) {
-//        String phoneNumber = customerRequest.getPhoneNumber();
-//        Customers existingCustomer = customerRepository.findByPhoneNumber(phoneNumber);
-//
-//        if (existingCustomer != null) {
-//            return globalExceptionHandler.handlePhoneNumberExists(phoneNumber);
-//        }
-//        Customers newCustomer = customerService.createCustomer(customerRequest);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(newCustomer);
-//    }
+
     public ResponseEntity<CustomersResponse> createCustomer(@RequestBody CustomersRequest customerRequest) {
         String phoneNumber = customerRequest.getPhoneNumber();
         Customers existingCustomer = customerRepository.findByPhoneNumber(phoneNumber);
@@ -50,26 +40,20 @@ public class CustomerController {
 
         Customers newCustomer = customerService.createCustomer(customerRequest);
 
-        // Create an instance of CustomersResponse
         CustomersResponse response = CustomersResponse.builder()
-                .firstName(newCustomer.getFirstName()) // Assuming getFirstName() exists in Customers
-                .lastName(newCustomer.getLastName())   // Assuming getLastName() exists in Customers
-                .phoneNumber(newCustomer.getPhoneNumber()) // Assuming getPhoneNumber() exists in Customers
-                .startDate(newCustomer.getStartDate()) // Assuming getStartDate() exists in Customers
+                .firstName(newCustomer.getFirstName())
+                .lastName(newCustomer.getLastName())
+                .phoneNumber(newCustomer.getPhoneNumber())
+                .startDate(newCustomer.getStartDate())
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    @GetMapping("/getAllCustomers")
-//        public ResponseEntity<List> getAllCustomers() {
-//        List<Customers> allCustomers = customerRepository.findAll();
-//        return ResponseEntity.status(HttpStatus.FOUND).body(allCustomers);
-//    }
 
+    @GetMapping("/getAllCustomers")
     public ResponseEntity<ApiResponse<List<CustomersResponse>>> getAllCustomers() {
         List<Customers> allCustomers = customerRepository.findAll();
 
-        // Convert Customers to CustomersResponse if needed
         List<CustomersResponse> customerResponses = allCustomers.stream()
                 .map(customer -> new CustomersResponse(
                         customer.getFirstName(),

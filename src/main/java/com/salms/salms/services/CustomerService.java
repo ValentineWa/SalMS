@@ -1,6 +1,8 @@
 package com.salms.salms.services;
 
 import com.salms.salms.dto.CustomersRequest;
+import com.salms.salms.exceptions.CustomerAlreadyExistsException;
+import com.salms.salms.exceptions.CustomerNotFoundException;
 import com.salms.salms.models.Customers;
 import com.salms.salms.repositories.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,14 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     public Customers createCustomer(CustomersRequest customerRequest){
+
+        String phoneNumber = customerRequest.getPhoneNumber();
+        Customers existingCustomer = customerRepository.findByPhoneNumber(phoneNumber);
+
+        if (existingCustomer != null) {
+            throw new CustomerAlreadyExistsException("Customer with phone number " + phoneNumber + " already exists.");
+        }
+
         Customers customer = new Customers();
         customer.setId(UUID.randomUUID());
         customer.setFirstName(customerRequest.getFirstName());
@@ -28,6 +38,5 @@ public class CustomerService {
         log.info("CUSTOMER [%s] HAS BEEN CREATED SUCCESSFULLY", customerRequest.getFirstName());
         return customer;
     }
-
 
 }
