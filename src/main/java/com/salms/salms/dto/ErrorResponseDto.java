@@ -21,5 +21,4 @@ public class ErrorResponseDto {
     private HttpStatus status;
     private String statusMessage;
 
-
 }

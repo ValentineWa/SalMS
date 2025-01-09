@@ -5,6 +5,7 @@ import com.salms.salms.exceptions.CustomerAlreadyExistsException;
 import com.salms.salms.exceptions.CustomerNotFoundException;
 import com.salms.salms.models.Customers;
 import com.salms.salms.repositories.CustomerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,21 @@ public class CustomerService {
         customerRepository.save(customer);
         log.info("CUSTOMER [%s] HAS BEEN CREATED SUCCESSFULLY", customerRequest.getFirstName());
         return customer;
+    }
+
+    public void deleteCustomer (Long id){
+        if (customerRepository.findById(id).isPresent()) {
+            throw new EntityNotFoundException("Customer With ID " + id + "Not Found" );
+        }
+        customerRepository.deleteById(id);
+    }
+
+    public void updateCustomer (Long id){
+
+        if (customerRepository.findById(id).isPresent() ) {
+            throw new EntityNotFoundException("Customer With ID " + id + "Not Found" );
+        }
+        customerRepository.deleteById(id);
     }
 
 }

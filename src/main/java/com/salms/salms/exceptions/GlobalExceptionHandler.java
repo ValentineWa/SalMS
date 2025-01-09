@@ -2,6 +2,7 @@ package com.salms.salms.exceptions;
 
 import com.salms.salms.dto.ErrorCode;
 import com.salms.salms.dto.ErrorResponseDto;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +43,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         EXCEPTION_MAPPINGS.put(AppointmentAlreadyExistsException.class, ErrorCode.APPOINTMENT_ALREADY_EXISTS);
 
     }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+    }
+
+
+
+
+
+
+
+
+
+
 @ExceptionHandler(CustomerAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDto> handlePhoneNumberExists(CustomerAlreadyExistsException ex) {
         log.error("Customer you are trying to create already exists.", ex.getMessage(), ex);
