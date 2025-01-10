@@ -40,19 +40,23 @@ public class CustomerService {
         return customer;
     }
 
-    public void deleteCustomer (Long id){
-        if (customerRepository.findById(id).isPresent()) {
+    public void deleteCustomerById (UUID id){
+
+        if (customerRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException("Customer With ID " + id + "Not Found" );
         }
         customerRepository.deleteById(id);
     }
 
-    public void updateCustomer (Long id){
+    public Customers updateCustomer (UUID id, Customers updatedCustomer){
 
-        if (customerRepository.findById(id).isPresent() ) {
-            throw new EntityNotFoundException("Customer With ID " + id + "Not Found" );
-        }
-        customerRepository.deleteById(id);
+        Customers existingCustomer = customerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Customer with ID " + id + " not found"));
+        existingCustomer.setFirstName( updatedCustomer.getFirstName());
+        existingCustomer.setLastName(updatedCustomer.getLastName());
+        existingCustomer.setPhoneNumber(updatedCustomer.getPhoneNumber());
+        existingCustomer.setStartDate(updatedCustomer.getStartDate());
+        return customerRepository.save(existingCustomer);
     }
 
 }

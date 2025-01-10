@@ -38,10 +38,10 @@ public class Customers implements Serializable {
     private Instant creationDate;
 
     //A customer can have many appointments generally
-    @OneToMany(mappedBy = "customers")
+    @OneToMany(mappedBy = "customers", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointments> appointments = new ArrayList<>();
 
-    //A customer can have many services in one appointment
+    //A customer can have many services in one appointment.
     @ManyToMany
     @JoinTable(
             name = "customer_services",

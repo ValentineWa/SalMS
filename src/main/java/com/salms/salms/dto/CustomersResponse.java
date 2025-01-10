@@ -10,6 +10,7 @@ import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +18,8 @@ import java.util.List;
 @Jacksonized
 @Builder
 public class CustomersResponse extends GenericApiResponseContent {
+    @JsonProperty("id")
+    private UUID id;
 
     @JsonProperty("firstName")
     private String firstName;
