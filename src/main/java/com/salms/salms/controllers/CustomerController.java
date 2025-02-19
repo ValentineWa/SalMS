@@ -37,7 +37,7 @@ public class CustomerController {
 
     @PostMapping("/createNew")
 
-    public ResponseEntity<CustomersResponse> createCustomer(@RequestBody CustomersRequest customerRequest) {
+    public ResponseEntity<ApiResponse<CustomersResponse>> createCustomer(@RequestBody CustomersRequest customerRequest) {
         String phoneNumber = customerRequest.getPhoneNumber();
         Customers existingCustomer = customerRepository.findByPhoneNumber(phoneNumber);
 
@@ -51,7 +51,7 @@ public class CustomerController {
                 .startDate(newCustomer.getStartDate())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(200,"Customers created successfully", response));
     }
 
     @GetMapping("/getAllCustomers")
@@ -71,14 +71,15 @@ public class CustomerController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/deleteCustomer/{id}")
-    public ResponseEntity<String> deleteCustomer(@PathVariable UUID id){
+    public ResponseEntity<ApiResponse<CustomersResponse>> deleteCustomer(@PathVariable UUID id){
        try {
            customerService.deleteCustomerById(id);
-           return ResponseEntity.ok("Customer Deleted Successfully");
+           ApiResponse<CustomersResponse> response = new ApiResponse<>(200, "Customer Deleted Successfully",null);
+           return ResponseEntity.ok(response);
        } catch (EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(404, "Customer Not Found", null));
        } catch (Exception e){
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An Error Occurred While Deleting The Customer");
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "An Error Occurred While Deleting The Customer", null ));
        }
        }
 

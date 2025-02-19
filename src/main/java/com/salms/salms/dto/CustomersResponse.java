@@ -1,7 +1,6 @@
 package com.salms.salms.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.salms.salms.models.Solutions;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Data
