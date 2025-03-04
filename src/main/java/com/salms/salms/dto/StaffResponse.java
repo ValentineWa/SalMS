@@ -7,12 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Jacksonized
 @Builder
 public class StaffResponse extends GenericApiResponseContent{
+    @JsonProperty("id")
+    private UUID id;
+
     @JsonProperty("staffName")
     private String staffName;
 
@@ -26,10 +33,10 @@ public class StaffResponse extends GenericApiResponseContent{
     private String idNumber;
 
     @JsonProperty("startDate")
-    private String startDate;
+    private LocalDate startDate;
 
     @JsonProperty("yearOfExperience")
-    private String yearOfExperience;
+    private int yearOfExperience;
 
     @JsonProperty("nationality")
     private String nationality;
@@ -38,6 +45,6 @@ public class StaffResponse extends GenericApiResponseContent{
     private String physicalAddress;
 
     @JsonProperty("services")
-    private String services;
+    private List services;
 
 }

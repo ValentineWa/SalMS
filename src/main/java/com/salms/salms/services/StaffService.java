@@ -1,10 +1,12 @@
 package com.salms.salms.services;
 
 import com.salms.salms.dto.StaffRequest;
+import com.salms.salms.models.Customers;
 import com.salms.salms.models.Solutions;
 import com.salms.salms.models.Staff;
 import com.salms.salms.repositories.SolutionRepository;
 import com.salms.salms.repositories.StaffRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +64,30 @@ public class StaffService {
           }
 
 
+    }
+
+    public void deleteStaffById (UUID id){
+
+        if (staffRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException("Customer With ID " + id + "Not Found" );
+        }
+        staffRepository.deleteById(id);
+    }
+
+    public Staff updateStaff (UUID id, Staff updatedStaff) {
+
+        Staff existingStaff = staffRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Customer with ID " + id + " not found"));
+        existingStaff.setStaffName(updatedStaff.getStaffName());
+        existingStaff.setStaffAlias(updatedStaff.getStaffAlias());
+        existingStaff.setIdNumber(updatedStaff.getIdNumber());
+        existingStaff.setPhoneNumber(updatedStaff.getPhoneNumber());
+        existingStaff.setStartDate(updatedStaff.getStartDate());
+        existingStaff.setYearsOfExperience(updatedStaff.getYearsOfExperience());
+        existingStaff.setNationality(updatedStaff.getNationality());
+        existingStaff.setPhysicalAddress(updatedStaff.getPhysicalAddress());
+        existingStaff.setSolutions(updatedStaff.getSolutions());
+        return staffRepository.save(existingStaff);
     }
 
 }
