@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Setter
@@ -33,6 +34,9 @@ public class Solutions implements Serializable {
 
     @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
+    private boolean isDeleted;
 
     //Many staff can perform many services
     @ToString.Exclude
