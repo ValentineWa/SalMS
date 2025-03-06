@@ -70,7 +70,9 @@ public class StaffController {
                         staff.getYearsOfExperience(),
                         staff.getNationality(),
                         staff.getPhysicalAddress(),
-                        staff.getSolutions()))
+                        staff.getSolutions().stream()
+                                .map(service -> service.getServiceName())
+                                .toList()))
                 .toList();
 
         ApiResponse<List<StaffResponse>> response = new ApiResponse<>(200, "Staff retrieved successfully", staffResponses);
