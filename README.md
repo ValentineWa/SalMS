@@ -2,7 +2,7 @@
 This is a Salon Based Data Management System. 
 This is going to be a high nd production based system developed here.
 
-###### Estimated Duration: 5Months
+
 
 ### Features
 This system will have the following features:
