@@ -1,0 +1,331 @@
+{
+	"info": {
+		"_postman_id": "6bca00d7-56c6-45e4-bb96-fdbb6adbd34e",
+		"name": "SALMA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24375332"
+	},
+	"item": [
+		{
+			"name": "Staff",
+			"item": [
+				{
+					"name": "Staff",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "client-password",
+								"username": "client"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic Y2xpZW50OmNsaWVudC1wYXNzd29yZA=="
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"staffName\": \"Lewis Loo\",\n  \"staffAlias\": \"Loo\",\n  \"idNumber\": \"3001\",\n  \"phoneNumber\": \"070333334\",\n  \"startDate\" : \"2024-10-10\",\n  \"yearsOfExperience\": 5,\n  \"nationality\": \"Kenyan\",\n  \"physicalAddress\": \"Kariobangi\",\n  \"serviceNames\":[\"Wash\", \"Twist\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8090/api/v1/staff/createNew"
+					},
+					"response": []
+				},
+				{
+					"name": "View All Staff",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "client-password",
+								"username": "client"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8090/api/v1/staff/getAllStaff"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Staff",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Update Staff",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Services",
+			"item": [
+				{
+					"name": "New Service",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "client-password",
+								"username": "client"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic Y2xpZW50OmNsaWVudC1wYXNzd29yZA=="
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"serviceName\": \"Washing\",\n  \"duration\": 20,\n  \"price\": \"3000\",\n  \"description\" : \"Just washing of scalp\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8090/api/v1/services/createNew"
+					},
+					"response": []
+				},
+				{
+					"name": "View All Services",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "client-password",
+								"username": "client"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8090/api/v1/customers/getAllCustomers"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Service",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Update Service",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "New Customer",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "client-password",
+								"username": "client"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "921e6183-62e4-4b8d-a63e-cb8771f1dd26",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Val\",\n  \"phoneNumber\": 3000,\n  \"startDate\" : \"2024-09-10\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{surl}}api/v1/customers/createNew"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "client-password",
+								"username": "client"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "921e6183-62e4-4b8d-a63e-cb8771f1dd26",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Val\",\n  \"phoneNumber\": 3000,\n  \"startDate\" : \"2024-09-10\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{surl}}api/v1/customers/createNew"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "client-password",
+								"username": "client"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "921e6183-62e4-4b8d-a63e-cb8771f1dd26",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Val\",\n  \"phoneNumber\": 3000,\n  \"startDate\" : \"2024-09-10\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{surl}}api/v1/customers/createNew"
+					},
+					"response": []
+				},
+				{
+					"name": "View All Customers",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "client-password",
+								"username": "client"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{surl}}api/v1/customers/getAllCustomers"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Appointment",
+			"item": [
+				{
+					"name": "Update Booking",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "All Bookings",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "New Booking",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "surl",
+			"value": "http://localhost:7790",
+			"type": "string"
+		},
+		{
+			"value": "",
+			"type": "string"
+		}
+	]
+}

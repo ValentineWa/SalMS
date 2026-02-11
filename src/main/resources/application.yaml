@@ -14,8 +14,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/salon_management
-    username: valentine.waweru
-    password: password
+    username: postgres
+    password: postgres
 
   jpa:
     hibernate:

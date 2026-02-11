@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class CustomersRequest {
     @NotNull private String firstName;
-     private String lastName;
+    @NotNull private String lastName;
     @NotNull private String phoneNumber;
     @NotNull private LocalDate startDate;
     @NotNull private Instant creationDate;
