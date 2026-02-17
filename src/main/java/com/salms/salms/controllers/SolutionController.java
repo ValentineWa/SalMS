@@ -1,12 +1,10 @@
 package com.salms.salms.controllers;
 
 import com.salms.salms.dto.ApiResponse;
-import com.salms.salms.dto.CustomersResponse;
 import com.salms.salms.dto.SolutionRequest;
 import com.salms.salms.dto.SolutionResponse;
 import com.salms.salms.exceptions.GlobalExceptionHandler;
-import com.salms.salms.models.Customers;
-import com.salms.salms.models.Solutions;
+import com.salms.salms.models.Solution;
 import com.salms.salms.repositories.SolutionRepository;
 import com.salms.salms.services.SolutionService;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/services")
@@ -36,10 +32,10 @@ public class SolutionController {
     @PostMapping("/createNew")
     public ResponseEntity<ApiResponse<SolutionResponse>> createService(@RequestBody SolutionRequest solutionRequest) {
         String serviceName = solutionRequest.getServiceName();
-            Solutions existingService = solutionRepository.findByServiceName(serviceName);
+            Solution existingService = solutionRepository.findByServiceName(serviceName);
 
 
-        Solutions newService = solutionService.createService(solutionRequest);
+        Solution newService = solutionService.createService(solutionRequest);
         SolutionResponse response = SolutionResponse.builder()
                 .serviceName(newService.getServiceName())
                 .duration(newService.getDuration())
@@ -54,7 +50,7 @@ public class SolutionController {
     @GetMapping("/getAllServices")
     public ResponseEntity<ApiResponse<List<SolutionResponse>>> getAllServices() {
 
-        List<Solutions> allServices = solutionRepository.findByIsDeletedFalse();
+        List<Solution> allServices = solutionRepository.findByIsDeletedFalse();
         List<SolutionResponse> solutionResponse = allServices.stream()
                 .map(service -> new SolutionResponse(
                         service.getId(),
@@ -83,10 +79,10 @@ public class SolutionController {
 
 
     @PutMapping("/updateService/{id}")
-    public ResponseEntity<Solutions> updateSolutions(@PathVariable String id, @RequestBody Solutions updatedSolution){
+    public ResponseEntity<Solution> updateSolutions(@PathVariable String id, @RequestBody Solution updatedSolution){
 
-        Solutions solutions = solutionService.updateService(id, updatedSolution);
-        return ResponseEntity.ok(solutions);
+        Solution solution = solutionService.updateService(id, updatedSolution);
+        return ResponseEntity.ok(solution);
 
     }
 }

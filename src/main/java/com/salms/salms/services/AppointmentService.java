@@ -1,17 +1,14 @@
 package com.salms.salms.services;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.salms.salms.dto.AppointmentRequest;
 import com.salms.salms.dto.AppointmentResponse;
 import com.salms.salms.exceptions.GlobalExceptionHandler;
 import com.salms.salms.models.*;
 import com.salms.salms.repositories.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
@@ -85,10 +82,10 @@ public class AppointmentService {
 
             List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
 
-            List<Solutions> services = new ArrayList<>();
+            List<Solution> services = new ArrayList<>();
         for (String serviceName : appointmentRequest.getServicesName()) {
 
-            Solutions sol = solutionRepository.findByServiceName(serviceName);
+            Solution sol = solutionRepository.findByServiceName(serviceName);
             if (sol == null) {
                 log.warn("SERVICE SELECTED NOT FOUND: {}", serviceName);
                 continue;
@@ -155,9 +152,9 @@ public class AppointmentService {
         responseDto.setStaffAlias(booking.getStaff().getStaffAlias());
         responseDto.setPhoneNumber(booking.getCustomers().getPhoneNumber());
 
-        List<Solutions> bookedServices = booking.getAppointmentDetails().stream()
+        List<Solution> bookedServices = booking.getAppointmentDetails().stream()
                 .map(details -> {
-                    Solutions servs = new Solutions();
+                    Solution servs = new Solution();
                     servs.setServiceName(details.getServices().get(0).getServiceName());
                     servs.setPrice(details.getPrice());
                     servs.setDuration(details.getDuration());

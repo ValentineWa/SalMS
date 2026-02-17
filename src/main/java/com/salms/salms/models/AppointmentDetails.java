@@ -36,7 +36,7 @@ public class AppointmentDetails implements Serializable {
     )
 
 
-    private List<Solutions> services = new ArrayList<>();
+    private List<Solution> services = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "staff_id", nullable = false)

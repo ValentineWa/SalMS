@@ -57,5 +57,5 @@ public class Staff implements Serializable {
             joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "solutions_id"))
 
-    private List<Solutions> solutions = new ArrayList<>();
+    private List<Solution> solutions = new ArrayList<>();
 }

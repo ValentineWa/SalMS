@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 @Setter
@@ -16,7 +15,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Entity
 @Table(name = "tbl_services")
-public class Solutions implements Serializable {
+public class Solution implements Serializable {
 
     @Id
     @Column(name = "id", nullable = false)

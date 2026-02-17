@@ -48,6 +48,6 @@ public class Customers implements Serializable {
             joinColumns = @JoinColumn(name = "customers_id"),
             inverseJoinColumns = @JoinColumn(name = "solutions_id"))
 
-    private List<Solutions> services = new ArrayList<>();
+    private List<Solution> services = new ArrayList<>();
 
 }

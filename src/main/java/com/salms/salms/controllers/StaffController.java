@@ -57,7 +57,7 @@ public class StaffController {
 
     @GetMapping("/getAllStaff")
     public ResponseEntity<ApiResponse<List<StaffResponse>>> getAllStaff() {
-        List<Staff> allStaff = staffRepository.findAll();
+        List<Staff> allStaff = staffRepository.findAllWithSolutions();
 
         List<StaffResponse> staffResponses = allStaff.stream()
                 .map(staff -> new StaffResponse(

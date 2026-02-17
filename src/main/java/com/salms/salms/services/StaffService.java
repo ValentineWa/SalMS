@@ -1,8 +1,7 @@
 package com.salms.salms.services;
 
 import com.salms.salms.dto.StaffRequest;
-import com.salms.salms.models.Customers;
-import com.salms.salms.models.Solutions;
+import com.salms.salms.models.Solution;
 import com.salms.salms.models.Staff;
 import com.salms.salms.repositories.SolutionRepository;
 import com.salms.salms.repositories.StaffRepository;
@@ -28,10 +27,10 @@ public class StaffService {
     public Staff createStaff (StaffRequest staffRequest){
 
         //5. Get the primary service getting done
-        List<Solutions> services = new ArrayList<>();
+        List<Solution> services = new ArrayList<>();
           for (String serviceName : staffRequest.getServiceNames()) {
 
-            Solutions sol = solutionRepository.findByServiceName(serviceName);
+            Solution sol = solutionRepository.findByServiceName(serviceName);
             if (sol == null) {
                 log.warn("SERVICE SELECTED NOT FOUND: {}", serviceName);
                 continue;

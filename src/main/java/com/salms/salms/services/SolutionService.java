@@ -1,8 +1,7 @@
 package com.salms.salms.services;
 
 import com.salms.salms.dto.SolutionRequest;
-import com.salms.salms.models.Customers;
-import com.salms.salms.models.Solutions;
+import com.salms.salms.models.Solution;
 import com.salms.salms.repositories.SolutionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -20,8 +18,8 @@ public class SolutionService {
     @Autowired
     private SolutionRepository solutionRepository;
 
-    public Solutions createService (SolutionRequest solutionRequest){
-        Solutions solution = new Solutions();
+    public Solution createService (SolutionRequest solutionRequest){
+        Solution solution = new Solution();
 
         int random4Digit = new Random().nextInt(9000) + 1000;
 
@@ -47,9 +45,9 @@ public class SolutionService {
         solutionRepository.deleteServiceByUpdatingId(id);
     }
 
-        public Solutions updateService (String id, Solutions updatedSolution){
+        public Solution updateService (String id, Solution updatedSolution){
 
-        Solutions existingSolution = solutionRepository.findById(id)
+        Solution existingSolution = solutionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Solutions with ID " + id + " not found"));
         existingSolution.setServiceName(updatedSolution.getServiceName());
         existingSolution.setDuration(updatedSolution.getDuration());
