@@ -22,7 +22,7 @@ public class StaffRequest {
     @NotNull private int yearsOfExperience;
     @NotNull private String nationality;
     @NotNull private String physicalAddress;
-    @NotNull private Instant creationDate;
-    @NotNull List<String> serviceNames;
+    @NotNull private List<String> serviceIds;
+
 
 }

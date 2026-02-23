@@ -2,10 +2,12 @@ package com.salms.salms.services;
 
 import com.salms.salms.dto.StaffRequest;
 import com.salms.salms.models.Solution;
-import com.salms.salms.models.Staff;
+import com.salms.salms.models.StaffSolution;
 import com.salms.salms.repositories.SolutionRepository;
 import com.salms.salms.repositories.StaffRepository;
+import com.salms.salms.repositories.StaffSolutionRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,54 +17,57 @@ import java.util.*;
 
 @Service
 @Slf4j
+@Transactional
 public class StaffService {
 
-    @Autowired
-    private StaffRepository staffRepository;
-    @Autowired
-    private SolutionRepository solutionRepository;
+    private final StaffRepository staffRepository;
+    private final SolutionRepository solutionRepository;
+    private final StaffSolutionRepository staffSolutionRepository;
 
+    public StaffService(
+            StaffRepository staffRepository,
+            SolutionRepository solutionRepository,
+            StaffSolutionRepository staffSolutionRepository) {
 
+        this.staffRepository = staffRepository;
+        this.solutionRepository = solutionRepository;
+        this.staffSolutionRepository = staffSolutionRepository;
+    }
 
-    public Staff createStaff (StaffRequest staffRequest){
+    public com.salms.salms.models.Staff createStaff(StaffRequest request) {
 
-        //5. Get the primary service getting done
-        List<Solution> services = new ArrayList<>();
-          for (String serviceName : staffRequest.getServiceNames()) {
+        // 1️⃣ Create Staff
+        com.salms.salms.models.Staff staff = new com.salms.salms.models.Staff();
+        staff.setStaffName(request.getStaffName());
+        staff.setStaffAlias(request.getStaffAlias());
+        staff.setIdNumber(request.getIdNumber());
+        staff.setPhoneNumber(request.getPhoneNumber());
+        staff.setStartDate(request.getStartDate());
+        staff.setYearsOfExperience(request.getYearsOfExperience());
+        staff.setNationality(request.getNationality());
+        staff.setPhysicalAddress(request.getPhysicalAddress());
+        staff.setCreationDate(Instant.now());
 
-            Solution sol = solutionRepository.findByServiceName(serviceName);
-            if (sol == null) {
-                log.warn("SERVICE SELECTED NOT FOUND: {}", serviceName);
-                continue;
-            }
-            services.add(sol);
+        staffRepository.save(staff);
 
+        // 2️⃣ Link services
+        for (String serviceId : request.getServiceIds()) {
+
+            Solution solution = solutionRepository.findById(serviceId)
+                    .orElseThrow(() ->
+                            new EntityNotFoundException("Service not found: " + serviceId));
+
+            StaffSolution staffSolution = new StaffSolution();
+            staffSolution.setStaff(staff);
+            staffSolution.setSolution(solution);
+            staffSolution.setActive(true);
+
+            staffSolutionRepository.save(staffSolution);
         }
-          try {
-              Staff staff = new Staff();
-              staff.setId(UUID.randomUUID());
-              staff.setStaffName(staffRequest.getStaffName());
-              staff.setStaffAlias(staffRequest.getStaffAlias());
-              staff.setIdNumber(staffRequest.getIdNumber());
-              staff.setPhoneNumber(staffRequest.getPhoneNumber());
-              staff.setStartDate(staffRequest.getStartDate());
-              staff.setYearsOfExperience(staffRequest.getYearsOfExperience());
-              staff.setNationality(staffRequest.getNationality());
-              staff.setPhysicalAddress(staffRequest.getPhysicalAddress());
-              staff.setCreationDate(Instant.now());
-              staff.setSolutions(services);
 
-              staffRepository.save(staff);
+        log.info("Staff [{}] created successfully", staff.getStaffName());
 
-              log.info("STAFF [%s] HAS BEEN CREATED SUCCESSFULLY", staffRequest.getStaffName());
-              return staff;
-          } catch(Exception e){
-              log.error("Record not saved. Unexpected Error occurred: {}", e.getMessage());
-              throw new IllegalArgumentException("An unexpected error occurred", e);
-
-          }
-
-
+        return staff;
     }
 
     public void deleteStaffById (UUID id){
@@ -73,9 +78,9 @@ public class StaffService {
         staffRepository.deleteById(id);
     }
 
-    public Staff updateStaff (UUID id, Staff updatedStaff) {
+    public com.salms.salms.models.Staff updateStaff (UUID id, com.salms.salms.models.Staff updatedStaff) {
 
-        Staff existingStaff = staffRepository.findById(id)
+        com.salms.salms.models.Staff existingStaff = staffRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Customer with ID " + id + " not found"));
         existingStaff.setStaffName(updatedStaff.getStaffName());
         existingStaff.setStaffAlias(updatedStaff.getStaffAlias());

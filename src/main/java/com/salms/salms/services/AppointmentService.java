@@ -94,9 +94,9 @@ public class AppointmentService {
 
 
             //3. Find the staff assigned to this service
-            Staff staff = staffRepository.findByStaffAlias(appointmentRequest.getStaffAlias());
+            StaffService staffService = staffRepository.findByStaffAlias(appointmentRequest.getStaffAlias());
 
-            if (staff == null) {
+            if (staffService == null) {
                 log.warn("STAFF SELECTED IS NOT FOUND FOR THIS SERVICE: {}", serviceName);
                 continue;
 
@@ -118,8 +118,8 @@ public class AppointmentService {
             details.setDuration(sol.getDuration());
             details.setCreationOn(Instant.now());
             details.setUpdatedOn(Instant.now());
-            details.setStaff(staff);
-            booking.setStaff(staff);
+            details.setStaff(staffService);
+            booking.setStaff(staffService);
 
 
             appointmentDetailsList.add(details);

@@ -1,12 +1,9 @@
 package com.salms.salms.controllers;
 
 import com.salms.salms.dto.ApiResponse;
-import com.salms.salms.dto.CustomersResponse;
 import com.salms.salms.dto.StaffRequest;
 import com.salms.salms.dto.StaffResponse;
 import com.salms.salms.exceptions.GlobalExceptionHandler;
-import com.salms.salms.models.Customers;
-import com.salms.salms.models.Staff;
 import com.salms.salms.repositories.StaffRepository;
 import com.salms.salms.services.StaffService;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,9 +32,9 @@ public class StaffController {
     @PostMapping("/createNew")
     public ResponseEntity<ApiResponse<StaffResponse>> createStaff(@RequestBody StaffRequest staffRequest) {
         String idNumber = staffRequest.getIdNumber();
-        Optional<Staff> existingStaff = staffRepository.findByIdNumber(idNumber);
+        Optional<com.salms.salms.models.Staff> existingStaff = staffRepository.findByIdNumber(idNumber);
 
-        Staff newStaff = staffService.createStaff(staffRequest);
+        com.salms.salms.models.Staff newStaff = staffService.createStaff(staffRequest);
 
         StaffResponse response = StaffResponse.builder()
                 .staffName(newStaff.getStaffName())
@@ -57,7 +54,7 @@ public class StaffController {
 
     @GetMapping("/getAllStaff")
     public ResponseEntity<ApiResponse<List<StaffResponse>>> getAllStaff() {
-        List<Staff> allStaff = staffRepository.findAllWithSolutions();
+        List<com.salms.salms.models.Staff> allStaff = staffRepository.findAllWithSolutions();
 
         List<StaffResponse> staffResponses = allStaff.stream()
                 .map(staff -> new StaffResponse(
@@ -75,17 +72,17 @@ public class StaffController {
                                 .toList()))
                 .toList();
 
-        ApiResponse<List<StaffResponse>> response = new ApiResponse<>(200, "Staff retrieved successfully", staffResponses);
+        ApiResponse<List<StaffResponse>> response = new ApiResponse<>(200, "StaffService retrieved successfully", staffResponses);
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/deleteStaff/{id}")
     public ResponseEntity<ApiResponse<StaffResponse>> deleteStaff(@PathVariable UUID id){
         try {
             staffService.deleteStaffById(id);
-            ApiResponse<StaffResponse> response = new ApiResponse<>(200, "Staff Deleted Successfully",null);
+            ApiResponse<StaffResponse> response = new ApiResponse<>(200, "StaffService Deleted Successfully",null);
             return ResponseEntity.ok(response);
         } catch (EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(404, "Staff Not Found", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(404, "StaffService Not Found", null));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(500, "An Error Occurred While Deleting The Customer", null ));
         }
@@ -93,9 +90,9 @@ public class StaffController {
 
 
     @PutMapping("/updateStaff/{id}")
-    public ResponseEntity<Staff> updateStaff(@PathVariable UUID id, @RequestBody Staff updatedStaff){
+    public ResponseEntity<com.salms.salms.models.Staff> updateStaff(@PathVariable UUID id, @RequestBody com.salms.salms.models.Staff updatedStaff){
 
-        Staff staff = staffService.updateStaff(id, updatedStaff);
+        com.salms.salms.models.Staff staff = staffService.updateStaff(id, updatedStaff);
         return ResponseEntity.ok(staff);
 
     }

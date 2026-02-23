@@ -1,5 +1,6 @@
 package com.salms.salms.models;
 
+import com.salms.salms.services.StaffService;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -51,11 +52,7 @@ public class Staff implements Serializable {
     //When the staff started worked here
 
     //A staff can perform many services
-    @ManyToMany
-    @JoinTable(
-            name = "staff_solutions",
-            joinColumns = @JoinColumn(name = "staff_id"),
-            inverseJoinColumns = @JoinColumn(name = "solutions_id"))
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StaffService> staffServiceServices = new ArrayList<>();
 
-    private List<Solution> solutions = new ArrayList<>();
 }

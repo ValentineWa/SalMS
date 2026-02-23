@@ -20,5 +20,5 @@ public class SolutionRequest {
     @NotNull private String description;
 
 //    @ManyToMany(mappedBy = "services")
-//    private Set<Staff> staff = new HashSet<>();
+//    private Set<StaffService> staff = new HashSet<>();
 }

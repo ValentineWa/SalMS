@@ -1,5 +1,6 @@
 package com.salms.salms.models;
 
+import com.salms.salms.services.StaffService;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,7 +40,8 @@ public class Solution implements Serializable {
 
     //Many staff can perform many services
     @ToString.Exclude
-    @ManyToMany(mappedBy = "solutions")
-    private List<Staff> staff = new ArrayList<>();
+    @OneToMany(mappedBy = "solution")
+    private List<StaffService> staffServiceServices = new ArrayList<>();
+
 
 }
