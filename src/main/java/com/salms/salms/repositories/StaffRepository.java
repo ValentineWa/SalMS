@@ -13,7 +13,10 @@ public interface StaffRepository extends JpaRepository<Staff, UUID> {
 
     Staff findByStaffAlias(String staffAlias);
 
-    @Query("SELECT DISTINCT s FROM Staff s LEFT JOIN FETCH s.solutions")
+    @Query("""
+    SELECT DISTINCT s FROM Staff s
+    LEFT JOIN FETCH s.staffSolutions ss
+    LEFT JOIN FETCH ss.solution
+""")
     List<Staff> findAllWithSolutions();
-
 }

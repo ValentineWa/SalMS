@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "staff_services")
+@Table(name = "staff_solutions")
 @Getter
 @Setter
 public class StaffSolution {

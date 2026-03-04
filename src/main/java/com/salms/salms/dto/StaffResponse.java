@@ -45,6 +45,6 @@ public class StaffResponse extends GenericApiResponseContent{
     private String physicalAddress;
 
     @JsonProperty("services")
-    private List services;
+    private List<StaffSolutionSummary> services;
 
 }

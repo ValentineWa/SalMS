@@ -24,5 +24,4 @@ public class StaffRequest {
     @NotNull private String physicalAddress;
     @NotNull private List<String> serviceIds;
 
-
 }
