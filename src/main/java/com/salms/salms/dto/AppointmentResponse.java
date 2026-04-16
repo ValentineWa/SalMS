@@ -19,6 +19,9 @@ import java.util.List;
 @Builder
 public class AppointmentResponse extends GenericApiResponseContent {
 
+    @JsonProperty("id")
+    private String id;
+
     @JsonProperty("first_name")
     private String firstName;
 

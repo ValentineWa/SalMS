@@ -1,5 +1,6 @@
 package com.salms.salms.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,10 +12,12 @@ import java.util.*;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tbl_appointments")
+
 public class Appointments implements Serializable {
+    @EqualsAndHashCode.Include
     @Id
     @Column(name = "id", nullable = false, columnDefinition = "UUID")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,6 +49,7 @@ public class Appointments implements Serializable {
 
     ////What's orphanremoval?
     @ToString.Exclude
+    @JsonManagedReference
     @OneToMany(mappedBy = "appointments", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AppointmentDetails> appointmentDetails = new ArrayList<>();
 

@@ -11,12 +11,13 @@ import java.util.*;
 @Setter
 @Getter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tbl_customers")
 public class Customers implements Serializable {
 
     @Id
+    @EqualsAndHashCode.Include
     @Column(nullable = false, columnDefinition = "UUID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;

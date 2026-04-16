@@ -1,5 +1,6 @@
 package com.salms.salms.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,15 +14,18 @@ import java.util.UUID;
 @Setter
 @Getter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tbl_appointment_details")
 public class AppointmentDetails implements Serializable {
 
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @ToString.Exclude
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "appointment_id", nullable = false)
     private Appointments appointments;

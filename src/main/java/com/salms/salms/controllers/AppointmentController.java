@@ -2,14 +2,17 @@ package com.salms.salms.controllers;
 
 import com.salms.salms.dto.*;
 import com.salms.salms.models.Appointments;
+import com.salms.salms.models.Customers;
 import com.salms.salms.repositories.AppointmentRepository;
 import com.salms.salms.services.AppointmentService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -26,15 +29,11 @@ public class AppointmentController {
 
         @PostMapping("/createNew")
         public ResponseEntity<ApiResponse<AppointmentResponse>> bookAppointment(@RequestBody AppointmentRequest appointmentRequest) {
-            try{
+
                 Appointments bookApp = appointmentService.bookAppointment(appointmentRequest);
                 AppointmentResponse response = appointmentService.createAppointmentResponse(bookApp);
                 return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(200,"Your Appointment has been created successfully", response));
 
-            } catch(Exception e)
-            {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-            }
         }
 
         @GetMapping("/getAllBookings")
@@ -48,5 +47,28 @@ public class AppointmentController {
         return ResponseEntity.ok(response);
         }
 
+    @DeleteMapping("/deleteBookings/{id}")
+    public ResponseEntity<ApiResponse<AppointmentResponse>> deleteBooking(@PathVariable UUID id){
+
+            appointmentService.deleteAppointmentById(id);
+            ApiResponse<AppointmentResponse> response = new ApiResponse<>(200, "Customer Deleted Successfully",null);
+            return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/updateBookings/{id}")
+    public ResponseEntity<ApiResponse<AppointmentResponse>> updateBookings(
+            @PathVariable UUID id,
+            @RequestBody Appointments updatedBookings) {
+
+        Appointments apt = appointmentService.updateBookings(id, updatedBookings);
+        AppointmentResponse response = appointmentService.createAppointmentResponse(apt);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>(
+                        200,
+                        "Your Appointment Has Been Updated Successfully",
+                        response
+                ));
+    }
 
 }

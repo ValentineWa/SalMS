@@ -3,9 +3,11 @@ package com.salms.salms.services;
 import com.salms.salms.dto.AppointmentRequest;
 import com.salms.salms.dto.AppointmentResponse;
 import com.salms.salms.dto.SolutionResponse;
+import com.salms.salms.exceptions.CustomerAlreadyExistsException;
 import com.salms.salms.exceptions.GlobalExceptionHandler;
 import com.salms.salms.models.*;
 import com.salms.salms.repositories.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,8 +68,8 @@ public class AppointmentService {
 
         Appointments booking = appointmentRepository.findByCustomersPhoneNumberAndAppDate(appointmentRequest.getPhoneNumber(), appointmentRequest.getAppDate());
             if (booking != null){
-                log.info("CUSTOMER ALREADY HAS AN EXISTING APPOINTMENT IN THE SELECTED DATE {}", appointmentRequest.getAppDate());
-                return booking;
+            throw new CustomerAlreadyExistsException("CUSTOMER ALREADY HAS AN EXISTING APPOINTMENT IN THE SELECTED DATE: " + appointmentRequest.getAppDate());
+
         }
 
             //Create the appointment in the primary table
@@ -141,43 +143,38 @@ public class AppointmentService {
 
         }
 
+    public Appointments updateBookings (UUID id, Appointments updatedBookings){
 
-//    public AppointmentResponse createAppointmentResponse(Appointments booking){
-//        AppointmentResponse responseDto = new AppointmentResponse();
-//        responseDto.setAppDate(booking.getAppDate());
-//        responseDto.setTime(booking.getTime());
-//        responseDto.setFirstName(booking.getCustomers().getFirstName());
-//        responseDto.setLastName(booking.getCustomers().getLastName());
-//        responseDto.setClientPreferences(booking.getClientPreferences());
-//        responseDto.setStaffAlias(booking.getStaff().getStaffAlias());
-//        responseDto.setPhoneNumber(booking.getCustomers().getPhoneNumber());
-//
-//        List<AppointmentDetails> bookedServices = booking.getAppointmentDetails().stream()
-//                .map(details -> {
-//                    AppointmentDetails servs = new AppointmentDetails();
-//                    servs.setServices(details.getServices().get(0).getServiceName());
-//                    servs.setPrice(details.getPrice());
-//                    servs.setDuration(details.getDuration());
-//                    return servs;
-//                })
-//                .collect(Collectors.toList());
-//
-//
-//
-//
-//        responseDto.setServicesName(bookedServices);
-//
-//        return responseDto;
-//    }
+        Appointments existingBooking = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment with ID " + id + " not found"));
+        existingBooking.setAppDate(updatedBookings.getAppDate());
+        existingBooking.setTime(updatedBookings.getTime());
+        existingBooking.setClientPreferences(updatedBookings.getClientPreferences());
+        existingBooking.setAppointmentDetails(updatedBookings.getAppointmentDetails());
+        existingBooking.setStaff(updatedBookings.getStaff());
+        existingBooking.setCustomers(updatedBookings.getCustomers());
+        existingBooking.setAppStatus(updatedBookings.getAppStatus());
+        existingBooking.setUpdatedOn(Instant.now());
+        return appointmentRepository.save(existingBooking);
+    }
+
+    public void deleteAppointmentById (UUID id){
+
+        if (appointmentRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException("Appointment With ID " + id + "Not Found" );
+        }
+        appointmentRepository.deleteById(id);
+    }
+
 
     public AppointmentResponse createAppointmentResponse(Appointments booking) {
 
         List<SolutionResponse> services = Optional.ofNullable(booking.getAppointmentDetails())
                 .orElse(Collections.emptyList())
                 .stream()
-                .flatMap(details -> details.getServices().stream()) // 🔥 important
+                .flatMap(details -> details.getServices().stream())
                 .map(sol -> SolutionResponse.builder()
-                        .id(sol.getId().toString())
+                        .id(sol.getId())
                         .serviceName(sol.getServiceName())
                         .price(sol.getPrice())
                         .duration(sol.getDuration())
@@ -186,6 +183,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
 
         return AppointmentResponse.builder()
+                .id(booking.getId().toString())
                 .firstName(booking.getCustomers().getFirstName())
                 .lastName(booking.getCustomers().getLastName())
                 .phoneNumber(booking.getCustomers().getPhoneNumber())
