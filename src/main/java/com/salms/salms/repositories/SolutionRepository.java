@@ -11,7 +11,6 @@ import java.util.List;
 public interface SolutionRepository extends JpaRepository<Solution, String> {
 
 
-//    Optional<Solutions> findByServiceName(String serviceName);
 
     Solution findByServiceName(String serviceName);
 

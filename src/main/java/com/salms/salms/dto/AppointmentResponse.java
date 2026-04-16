@@ -1,6 +1,7 @@
 package com.salms.salms.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.salms.salms.models.AppointmentDetails;
 import com.salms.salms.models.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,5 +41,5 @@ public class AppointmentResponse extends GenericApiResponseContent {
     private String clientPreferences;
 
     @JsonProperty("services_name")
-    private List<Solution> servicesName;
+    private List<SolutionResponse> servicesName;
 }

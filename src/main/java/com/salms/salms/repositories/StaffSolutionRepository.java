@@ -4,6 +4,7 @@ import com.salms.salms.models.Staff;
 import com.salms.salms.models.StaffSolution;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,8 @@ public interface StaffSolutionRepository extends JpaRepository<StaffSolution, UU
     LEFT JOIN FETCH s.staffSolutions ss
     LEFT JOIN FETCH ss.solution """)
     List<Staff> findAllWithSolutions();
+
+
 
 
 }
