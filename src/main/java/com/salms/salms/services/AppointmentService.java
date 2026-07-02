@@ -197,6 +197,7 @@ public class AppointmentService {
                 .appDate(booking.getAppDate())
                 .time(booking.getTime())
                 .clientPreferences(booking.getClientPreferences())
+                .appStatus(booking.getAppStatus())
                 .servicesName(services)
                 .build();
     }
@@ -238,7 +239,17 @@ public class AppointmentService {
         appointment.setAppStatus(Appointments.AppStatus.CONFIRMED);
         return appointmentRepository.save(appointment);
     }
+    public Appointments cancelAppointment(UUID id){
 
+        Appointments appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+
+        if (appointment.getAppStatus() != Appointments.AppStatus.OPEN) {
+            throw new IllegalStateException("Only OPEN appointments can be transitioned to CANCELLED");
+        }
+        appointment.setAppStatus(Appointments.AppStatus.CANCELLED);
+        return appointmentRepository.save(appointment);
+    }
 
 
 

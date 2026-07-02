@@ -60,6 +60,7 @@ public class Appointments implements Serializable {
     private Instant updatedOn;
 
     public enum AppStatus {
+        CANCELLED, //Customer cancelled the appointment
         OPEN, //Customer has created the appointment, not done but booked
         IN_PROGRESS,    //Customer is currently receiving the services
         CONFIRMED,       // All services confirmed and staff added and total amount provided. Final Step before payment

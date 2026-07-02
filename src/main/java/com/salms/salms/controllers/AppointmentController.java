@@ -100,11 +100,10 @@ public class AppointmentController {
     }
 
     @PostMapping("/appointments/{id}/cancel")
-    public ResponseEntity<ApiResponse<AppointmentResponse>> updateBooking(
-            @PathVariable UUID id,
-            @RequestBody Appointments updatedBookings) {
+    public ResponseEntity<ApiResponse<AppointmentResponse>> cancelBooking(
+            @PathVariable UUID id) {
 
-        Appointments apt = appointmentService.updateBookings(id, updatedBookings);
+        Appointments apt = appointmentService.cancelAppointment(id);
         AppointmentResponse response = appointmentService.createAppointmentResponse(apt);
 
         return ResponseEntity.status(HttpStatus.OK)
