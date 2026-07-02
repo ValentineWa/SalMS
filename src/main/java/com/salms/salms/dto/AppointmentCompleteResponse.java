@@ -1,8 +1,6 @@
 package com.salms.salms.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.salms.salms.models.AppointmentDetails;
-import com.salms.salms.models.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Jacksonized
 @Builder
-public class AppointmentResponse extends GenericApiResponseContent {
+public class AppointmentCompleteResponse extends GenericApiResponseContent {
 
     @JsonProperty("id")
     private String id;

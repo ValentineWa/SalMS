@@ -7,11 +7,14 @@ import com.salms.salms.exceptions.CustomerAlreadyExistsException;
 import com.salms.salms.exceptions.GlobalExceptionHandler;
 import com.salms.salms.models.*;
 import com.salms.salms.repositories.*;
+import com.salms.salms.services.PaymentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
@@ -40,6 +43,9 @@ public class AppointmentService {
     private AppointmentDetailsRepository appointmentDetailsRepository;
     @Autowired
     private StaffSolutionRepository staffSolutionRepository;
+
+    @Autowired
+    private PaymentService paymentService;
 
     public Appointments bookAppointment (AppointmentRequest appointmentRequest){
         String phoneNumber = appointmentRequest.getPhoneNumber();
@@ -194,4 +200,46 @@ public class AppointmentService {
                 .servicesName(services)
                 .build();
     }
+
+
+    public Appointments inProgressAppointment(UUID id){
+
+        Appointments appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+
+        if (appointment.getAppStatus() != Appointments.AppStatus.OPEN) {
+            throw new IllegalStateException("Only OPEN appointments can be transitioned to IN_PROGRESS");
+        }
+        appointment.setAppStatus(Appointments.AppStatus.IN_PROGRESS);
+        return appointmentRepository.save(appointment);
+    }
+
+
+    public Appointments completeAppointment(UUID id){
+        Appointments appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+
+        if (appointment.getAppStatus() != Appointments.AppStatus.IN_PROGRESS) {
+            throw new IllegalStateException("Only IN_PROGRESS appointments can be completed");
+        }
+
+        // Calculate total amount from appointment details
+        BigDecimal totalAmount = Optional.ofNullable(appointment.getAppointmentDetails())
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(AppointmentDetails::getPrice)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Create pending payment for this appointment
+        paymentService.createPendingPayment(appointment, totalAmount);
+
+        // Update status to CONFIRMED (services done, payment pending) and persist
+        appointment.setAppStatus(Appointments.AppStatus.CONFIRMED);
+        return appointmentRepository.save(appointment);
+    }
+
+
+
+
 }
