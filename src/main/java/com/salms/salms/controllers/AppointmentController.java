@@ -81,7 +81,35 @@ public class AppointmentController {
                         "Your Appointment Has Been Updated Successfully",
                         response
                 ));
+    }
 
+    @PostMapping("/appointments/{id}/noShow")
+    public ResponseEntity<ApiResponse<AppointmentResponse>> noShowAppointment(
+            @PathVariable UUID id) {
+
+        Appointments appointment = appointmentService.noShowAppointment(id);
+        AppointmentResponse response = appointmentService.createAppointmentResponse(appointment);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>(
+                        200,
+                        "Your Appointment Has Been Updated Successfully As A No Show",
+                        response
+                ));
+    }
+
+    @PostMapping("/appointments/{id}/confirm")
+    public ResponseEntity<ApiResponse<AppointmentResponse>> awaitPaymentAppointment(
+            @PathVariable UUID id) {
+        Appointments apt = appointmentService.awaitPaymentAppointment(id);
+        AppointmentResponse response = appointmentService.createAppointmentResponse(apt);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>(
+                        200,
+                        "Your Appointment Has Been Updated Successfully",
+                        response
+                ));
     }
 
     @PostMapping("/appointments/{id}/completed")
@@ -98,7 +126,6 @@ public class AppointmentController {
                         response
                 ));
     }
-
     @PostMapping("/appointments/{id}/cancel")
     public ResponseEntity<ApiResponse<AppointmentResponse>> cancelBooking(
             @PathVariable UUID id) {

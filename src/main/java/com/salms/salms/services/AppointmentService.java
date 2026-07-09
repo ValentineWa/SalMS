@@ -32,7 +32,8 @@ public class AppointmentService {
 
     @Autowired
     private StaffRepository staffRepository;
-
+    @Autowired
+    private PaymentsRepository paymentsRepository;
     @Autowired
     private GlobalExceptionHandler globalExceptionHandler;
 
@@ -43,7 +44,6 @@ public class AppointmentService {
     private AppointmentDetailsRepository appointmentDetailsRepository;
     @Autowired
     private StaffSolutionRepository staffSolutionRepository;
-
     @Autowired
     private PaymentService paymentService;
 
@@ -67,17 +67,33 @@ public class AppointmentService {
             customerRepository.save(customers);
 
 
-            log.info("CUSTOMER DETAILS HAVE BEEN ADDED TO THE DATABASE SUCCESSFULY");
+            log.info("CUSTOMER DETAILS HAVE BEEN ADDED TO THE DATABASE SUCCESSFULLY");
         }
 
         //4. Check if they have existing appointment
 
-        Appointments booking = appointmentRepository.findByCustomersPhoneNumberAndAppDate(appointmentRequest.getPhoneNumber(), appointmentRequest.getAppDate());
-            if (booking != null){
-            throw new CustomerAlreadyExistsException("CUSTOMER ALREADY HAS AN EXISTING APPOINTMENT IN THE SELECTED DATE: " + appointmentRequest.getAppDate());
+//        Appointments booking = appointmentRepository.findByCustomersPhoneNumberAndAppDate(appointmentRequest.getPhoneNumber(), appointmentRequest.getAppDate());
+//            if (booking != null){
+//            throw new CustomerAlreadyExistsException("CUSTOMER ALREADY HAS AN EXISTING APPOINTMENT IN THE SELECTED DATE: " + appointmentRequest.getAppDate());
+//        }
+        Appointments booking = appointmentRepository.findByCustomersPhoneNumberAndAppDate(
+                appointmentRequest.getPhoneNumber(),
+                appointmentRequest.getAppDate()
+        );
 
+        if (booking != null) {
+            Appointments.AppStatus status = booking.getAppStatus();
+
+            if (status != Appointments.AppStatus.COMPLETED
+                    && status != Appointments.AppStatus.CANCELLED
+                    && status != Appointments.AppStatus.NO_SHOW) {
+
+                throw new CustomerAlreadyExistsException(
+                        "CUSTOMER ALREADY HAS AN EXISTING APPOINTMENT ON "
+                                + appointmentRequest.getAppDate()
+                );
+            }
         }
-
             //Create the appointment in the primary table
             booking = new Appointments();
             booking.setCustomers(customers);
@@ -86,6 +102,7 @@ public class AppointmentService {
             booking.setId(UUID.randomUUID());
             booking.setClientPreferences(appointmentRequest.getClientPreferences());
             booking.setAppStatus(Appointments.AppStatus.OPEN);
+            booking.setPaymentStatus(Appointments.PaymentStatus.UNPAID);
             booking.setCreatedOn(Instant.now());
             booking.setUpdatedOn(Instant.now());
 
@@ -193,7 +210,8 @@ public class AppointmentService {
                 .firstName(booking.getCustomers().getFirstName())
                 .lastName(booking.getCustomers().getLastName())
                 .phoneNumber(booking.getCustomers().getPhoneNumber())
-                .staffAlias(booking.getStaff().getStaffAlias())
+                // Staff might be unassigned at creation time; avoid NPE
+                .staffAlias(booking.getStaff() != null ? booking.getStaff().getStaffAlias() : null)
                 .appDate(booking.getAppDate())
                 .time(booking.getTime())
                 .clientPreferences(booking.getClientPreferences())
@@ -202,6 +220,17 @@ public class AppointmentService {
                 .build();
     }
 
+    public Appointments noShowAppointment(UUID id){
+
+        Appointments appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+
+        if (appointment.getAppStatus() != Appointments.AppStatus.OPEN) {
+            throw new IllegalStateException("Only OPEN appointments can be transitioned to NO_SHOW");
+        }
+        appointment.setAppStatus(Appointments.AppStatus.NO_SHOW);
+        return appointmentRepository.save(appointment);
+    }
 
     public Appointments inProgressAppointment(UUID id){
 
@@ -215,8 +244,7 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
-
-    public Appointments completeAppointment(UUID id){
+    public Appointments awaitPaymentAppointment(UUID id){
         Appointments appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
 
@@ -235,20 +263,56 @@ public class AppointmentService {
         // Create pending payment for this appointment
         paymentService.createPendingPayment(appointment, totalAmount);
 
-        // Update status to CONFIRMED (services done, payment pending) and persist
-        appointment.setAppStatus(Appointments.AppStatus.CONFIRMED);
+        // Update status to AWAITING_PAYMENT (services done, payment pending) and persist
+        appointment.setAppStatus(Appointments.AppStatus.AWAITING_PAYMENT);
         return appointmentRepository.save(appointment);
     }
+
     public Appointments cancelAppointment(UUID id){
 
         Appointments appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
 
-        if (appointment.getAppStatus() != Appointments.AppStatus.OPEN) {
+        if (appointment.getAppStatus() != Appointments.AppStatus.IN_PROGRESS) {
             throw new IllegalStateException("Only OPEN appointments can be transitioned to CANCELLED");
         }
         appointment.setAppStatus(Appointments.AppStatus.CANCELLED);
         return appointmentRepository.save(appointment);
+    }
+
+
+    /**
+     * Recomputes the expected total for the appointment from its details,
+     * sums up all PAID payments, and if fully covered transitions the
+     * appointment to COMPLETED. Otherwise leaves it as-is.
+     */
+    public Appointments completeAppointment(UUID id) {
+        Appointments appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+
+        // Compute expected total from appointment details
+        BigDecimal expectedTotal = Optional.ofNullable(appointment.getAppointmentDetails())
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(AppointmentDetails::getPrice)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Sum what has actually been PAID for the appt.
+        BigDecimal totalPaid = paymentService.getTotalPaidForAppointment(appointment.getId());
+
+        // Only move to COMPLETED when fully paid and currently AWAITING_PAYMENT.
+        // This does not account for DISCOUNTED txns. Handle that in the future.
+        if (totalPaid != null
+                && expectedTotal != null
+                && totalPaid.compareTo(expectedTotal) >= 0
+                && appointment.getAppStatus() == Appointments.AppStatus.AWAITING_PAYMENT) {
+            appointment.setAppStatus(Appointments.AppStatus.COMPLETED);
+            appointment.setUpdatedOn(Instant.now());
+            return appointmentRepository.save(appointment);
+        }
+
+        return appointment; // unchanged if not fully paid yet
     }
 
 

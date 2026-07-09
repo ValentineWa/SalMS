@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
@@ -28,9 +29,9 @@ public class Appointments implements Serializable {
     @JoinColumn(name = "customers_id", referencedColumnName = "id", nullable=false)
     private Customers customers;
 
-    //A staff can have many appointments
+    //A staff can have many appointments. Allow null at creation (walk-ins/unassigned).
     @ManyToOne
-    @JoinColumn(name = "staff_id", referencedColumnName = "id", nullable=false)
+    @JoinColumn(name = "staff_id", referencedColumnName = "id", nullable=true)
     private Staff staff;
 
     @Column(nullable = false)
@@ -59,12 +60,60 @@ public class Appointments implements Serializable {
     @Column(nullable = false)
     private Instant updatedOn;
 
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal totalAmount = BigDecimal.ZERO;
+
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal discountAmount = BigDecimal.ZERO;
+
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal finalAmount = BigDecimal.ZERO;
+
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal amountPaid = BigDecimal.ZERO;
+
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal balance = BigDecimal.ZERO;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentStatus paymentStatus;
+
     public enum AppStatus {
         CANCELLED, //Customer cancelled the appointment
         OPEN, //Customer has created the appointment, not done but booked
         IN_PROGRESS,    //Customer is currently receiving the services
-        CONFIRMED,       // All services confirmed and staff added and total amount provided. Final Step before payment
+        AWAITING_PAYMENT,   // All services confirmed and staff added and total amount provided. Final Step before payment-trigger payments
         COMPLETED,       // All services have been provided and appointed is finished, payment done.
+        NO_SHOW     //For tracking purposes and differentiate between normal cancellation and no shows.
     }
 
+    public enum PaymentStatus {
+        UNPAID,
+        PARTIAL,
+        PAID,
+        REFUNDED
+    }
+
+    @OneToMany(mappedBy = "appointments",
+            cascade = CascadeType.ALL)
+    private List<Payments> payments = new ArrayList<>();
 }
+
+
+
+
+
+
+
+//totalAmount = sum(service prices)
+//discountAmount = approved discount
+//finalAmount = totalAmount - discountAmount
+//amountPaid = sum(payments)
+//balance = finalAmount - amountPaid
+
+
+
+
+
+

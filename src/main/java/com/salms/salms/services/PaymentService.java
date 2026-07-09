@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -42,6 +43,32 @@ public class PaymentService {
         payment.setAmount(amount);
         payment.setStatus(Payments.PaymentStatus.PENDING);
         payment.setCreatedOn(Instant.now());
+        payment.setUpdatedOn(Instant.now());
+        return paymentsRepository.save(payment);
+    }
+
+    public BigDecimal getTotalPaidForAppointment(UUID appointmentId) {
+        return paymentsRepository.sumAmountByAppointmentIdAndStatus(
+                appointmentId,
+                Payments.PaymentStatus.PAID
+        );
+    }
+
+    public Payments markPaymentPaid(UUID paymentId,
+                                    String receiptNumber,
+                                    String externalReference,
+                                    Instant paidAt,
+                                    BigDecimal amountOverride) {
+        Payments payment = paymentsRepository.findById(paymentId)
+                .orElseThrow(() -> new IllegalArgumentException("Payment not found"));
+
+        if (amountOverride != null) {
+            payment.setAmount(amountOverride);
+        }
+        payment.setReceiptNumber(receiptNumber);
+        payment.setExternalReference(externalReference);
+        payment.setPaymentDate(paidAt != null ? paidAt : Instant.now());
+        payment.setStatus(Payments.PaymentStatus.PAID);
         payment.setUpdatedOn(Instant.now());
         return paymentsRepository.save(payment);
     }

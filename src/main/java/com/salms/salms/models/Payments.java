@@ -22,6 +22,7 @@ public class Payments implements Serializable {
     @Column(name = "id", nullable = false, columnDefinition = "UUID")
     private UUID id;
 
+    @ToString.Exclude
     @ManyToOne(optional = false)
     @JoinColumn(name = "appointment_id", referencedColumnName = "id", nullable = false)
     private Appointments appointments;
@@ -32,6 +33,19 @@ public class Payments implements Serializable {
 
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
+
+    private String currency; // KES
+
+    @Enumerated(EnumType.STRING)
+    private PaymentProvider provider;
+
+    private String receiptNumber;
+
+    private String externalReference;
+
+    private String payerPhoneNumber;
+
+    private Instant paymentDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

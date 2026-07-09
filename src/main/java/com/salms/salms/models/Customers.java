@@ -39,6 +39,7 @@ public class Customers implements Serializable {
     private Instant creationDate;
 
     //A customer can have many appointments generally
+    @ToString.Exclude
     @OneToMany(mappedBy = "customers", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointments> appointments = new ArrayList<>();
 
